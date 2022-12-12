@@ -1,18 +1,20 @@
-name: hello-world
+
+name: Setup and check
 on: push
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SECRET_SNYK }}
-      - uses: actions/setup-node@v3
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: '16.x'
           cache: 'npm'
       - run: make setup
-      - run: make test
       - run: make lint
+      - run: make test
+      - name: Run Snyk
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.Secret_SNYK }}
